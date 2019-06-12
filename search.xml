@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[使用pyradiomics提取医学图像中的特征]]></title>
+    <url>%2Fp%2F5ee0.html</url>
+    <content type="text"><![CDATA[pyradiomics是一个开源的python包，用于提取医学影像上的放射组学特征。 这篇主要讲了pyradiomics的安装以及使用。 安装 确保计算机已经安装了python，且版本在3.4以上 通过python -m pip install pyradiomics进行安装 其他安装方法可以参照官方文档 特征提取命令行运行pyradiomics可以直接在命令行中进行操作，可以对单组图像或者批量图像进行特征提取。 在提取前先确保你有医学影像的nrrd格式文件以及对应的标注轮廓后的Mask文件 nrrd并不是必须的，只要是itk能读取的格式就行（比如NIfTI，MHA，MHD，HDR等） 从单个图像中提取特征 1$ pyradiomics &lt;path/to/image&gt; &lt;path/to/segmentation&gt; 从批量图像中提取特征 1$ pyradiomics &lt;path/to/input&gt; 批量图像处理时的输入为csv文件，其中第一列的标题必须为Image，第二列的标题必须为Mask（大小写敏感）。Image那一列存放的信息为每个图像的存放地址，Msak为mask的存放地址。也可以添加其他列，计算后得到的特征值将存在添加的列后面，添加的列信息保持不变。 所有标题都应该是唯一的，与PyRadiomics（&lt;filter&gt;_&lt;class&gt;_&lt;feature&gt;）提供的标题不同。如果发生冲突，PyRadiomics值会覆盖值。 默认情况下特征值将打印到控制台窗口，如果需要将结果存储csv文件中需要将命令修改为： 12$ pyradiomics &lt;path/to/image&gt; &lt;path/to/segmentation&gt; -o results.csv -f csv$ pyradiomics &lt;path/to/input&gt; -o results.csv -f csv 对于特征提取时的参数选择可以通过在参数中指定参数文件radiomics-parameter-file-label--param 或者添加定义提取--setting来完成。 使用python进行特征提取12345678910111213141516import osimport SimpleITK as sitkimport sixfrom radiomics import featureextractor, getTestCase dataDir = '/path/to/pyradiomics' # 存放有image和mask的文件夹imageName, maskName = getTestCase('brain1', dataDir) # 将iamge路径和mask路径分开存储params = os.path.join(dataDir, "examples", "exampleSettings", "Params.yaml") # 参数文件路径extractor = featureextractor.RadiomicsFeaturesExtractor(params) # 使用参数文件实例化特征提取器类result = extractor.execute(imageName, maskName)for key, val in six.iteritems(result): print("\t%s: %s" %(key, val)) # 进行特征提取 3D slicer在3D slicer中可以添加“Radiomics”扩展，按照要求导入文件，即可输出特征文件。]]></content>
+      <categories>
+        <category>医学图像</category>
+      </categories>
+      <tags>
+        <tag>radiomics</tag>
+        <tag>医学图像</tag>
+        <tag>特征提取</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python库:pathlib和os的区别]]></title>
+    <url>%2Fp%2F787a.html</url>
+    <content type="text"><![CDATA[pathlib作为python3的新特性之一，对于路径会创造Path对象，使对路径的操作更方便。之前在别人的代码里见识到了pathlib的优点，现在希望用pathlib来代替os库来完成路径的操作。 目前我主要用到os的地方有以下几个： 路径拼接 新建文件夹 文件遍历 获得子级文件的路径 重命名文件夹 pathlib的优势 pathlib的不足 路径拼接 pathlib采用了斜线直接连接的方式， 1234import ospath = 'root'dir = 'test'target_path = os.path.join(path,dir) # 'root/test' 123from pathlib import Pathp1 = Path('root')p2 = p1/'test' 新建文件夹 在使用os库的时候，新建文件夹之前需要判断文件夹是否存在，如果文件夹已存在，创建文件夹时会报错。 1234import osif not os.path.exists(path): os.mkdir(path) # 创建一个文件夹 os.makedirs(path) # 创建多个文件夹 123from pathlib import Pathp = 'XXX'p.mkdir(parents=True) # parents=True会创造路径中间缺少的文件夹 文件遍历 1234import osfor root, dirs, files in os.walk(path): for file in files: temp_path = os.path.join(root, file) pathlib在遍历时结合了glob,在检索时还能定制检索的要求。 123456from pathlib import Pathbase_dir = 'XXX'p = Path(base_dir)# 遍历获取改文件夹下面所有的文件file_list = p.glob('**/*') for f in file_list: 获得子级文件的路径 1234import osos.listdir()from pathlib import Path Path.iterdir() 重命名文件夹 12345678910import osos.rename(src, dst)# src -- 要修改的目录名# dst -- 修改后的目录名from pathlib import Path p = Path(src)p.rename(dst)# 即pathlib主要是通过对象来完成功能 pathlib的优势 在建立path对象之后，可以调用路径的组件直接获得路径的信息： 123456789101112131415161718192021222324252627Path. parts #获得路径的各个组件PurePath('/usr/bin/python3').parts('/','usr', 'bin', 'python3')######################################PurePath. drive #获得路径的驱动PureWindowsPath('c:/Program Files/').drive'c:'########################################PurePath. parents #路径的父级p = PureWindowsPath('c:/foo/bar/setup.py')p.parents[0]PureWindowsPath('c:/foo/bar')p.parents[1]PureWindowsPath('c:/foo')p.parents[2]PureWindowsPath('c:/')#########################################PurePath. name #路径的最终路径PurePosixPath('my/library/setup.py').name'setup.py##########################################PurePath. suffix #路径的文件拓展名PurePosixPath('my/library/setup.py').suffix'.py' pathlib一些方法在实现时调用了os的方法，所以很多输出他们是一样的。 123456@classmethoddef cwd(cls): """Return a new path pointing to the current working directory (as returned by os.getcwd()). """ return cls(os.getcwd()) 但是使用 Path 对象可以使代码更加明确。比如 123456from datetime import datefrom pathlib import Pathperson = &#123;"name": "Trey Hunner", "location": "San Diego"&#125;pycon_2019 = date(2019, 5, 1)home_directory = Path('/home/trey') 就会比下面的代码更直观。 123person = '&#123;"name": "Trey Hunner", "location": "San Diego"&#125;'pycon_2019 = "2019-05-01"home_directory = '/home/trey' pathlib的不足之处 pathlib缺少对文件夹进行复制粘贴的功能，相应操作需要导入shutil才能完成 pathlib缺少os.chdir，无法改变当前的工作目录 最后是一些os和pathlib的对照语法。]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+        <tag>pathlib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[优化网站打开的速度]]></title>
+    <url>%2Fp%2F7c7e.html</url>
+    <content type="text"><![CDATA[在加了一些功能之后发现网络打开太慢了，尝试一些能加速打开的方法。 首先测试一下什么都不做时候的效果 测试计时用的是chrome的web调试中的Network加载时间 初次打开时间在3秒左右，之后重复刷新时间在1.2s左右 尝试CDN加速使用CloudFlare来修改DNS 测试打开时间依旧在3s以上 并没有明显变化，由于CloudFlare使用的不是大陆的服务器，可能反而会导致速度更慢，暂时放弃这种方法 取消加载动画next主题自带加载动画，会在网站感官上变得很慢，先去掉动画尝试一下效果 12motion: enable: false 图片懒加载在使用到图片时才进行加载，加快网站打开速度 待尝试]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+        <tag>cdn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[博客更新]]></title>
+    <url>%2Fp%2Fea1c.html</url>
+    <content type="text"><![CDATA[在之前的基础上对博客添加一点优化 包括博文置顶、添加当前浏览进度、加入live2d、添加评论功能、添加访问人数 博文置顶安装插件 12$ npm uninstall hexo-generator-index --save$ npm install hexo-generator-index-pin-top --save 然后在需要置顶的文章上加入top，如 12345---title: 2018date: 2018-10-25 16:10:03top: 10--- 添加当前浏览进度修改themes/*/_config.yml，把 false 改为 true： 12345# Back to top in sidebarb2t: true# Scroll percent label in b2t buttonscrollpercent: true 加入live2d安装插件 1npm install --save hexo-helper-live2d 将以下代码添加到主题配置文件_config.yml，修改&lt;你喜欢的模型名字&gt;： 12345678910111213141516live2d: enable: true scriptFrom: local pluginRootPath: live2dw/ pluginJsPath: lib/ pluginModelPath: assets/ tagMode: false log: false model: use: live2d-widget-model-&lt;你喜欢的模型名字&gt; display: position: right width: 150 height: 300 mobile: show: true 建配置文件 在站点目录下建文件夹live2d_models， 再在live2d_models下建文件夹&lt;你喜欢的模型名字&gt;, 再在&lt;你喜欢的模型名字&gt;下建json文件：&lt;你喜欢的模型名字&gt;.model.json 安装模型。在命令行（即Git Bash）运行以下命令即可： npm install –save live2d-widget-model-&lt;你喜欢的模型名字&gt; 在命令行（即Git Bash）运行以下命令， 在http://127.0.0.1:4000/查看测试结果: hexo clean &amp;&amp; hexo g &amp;&amp; hexo s 然后因为太丑了取消掉了。 添加评论功能这是我参考的博客 然后参考着就放弃了，然后选择了Valine 比起必须备案的畅言，valine只需要注册就能得到app ID，十分方便，评论时也无需登录 12345678910valine:enable: trueappid: xxxxxx # 填写 leancloud appidappkey: xxxxxx # 填写 leancloud appkeynotify: false #verify: false # Verification codeplaceholder: # comment box placeholder 默认的评论展示avatar: mm # gravatar styleguest_info: nick,mail,link # custom comment headerpageSize: 10 # pagination size 添加访问人数next主题自带busuanzi，只需要在主题配置文件中找到busuanzi，并将False改为true即可。 12345678busuanzi_count: enable: true total_visitors: true total_visitors_icon: user total_views: true total_views_icon: eye post_views: true post_views_icon: eye]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[公式、图片输入]]></title>
+    <url>%2Fp%2F91ec.html</url>
+    <content type="text"><![CDATA[目前新建的博客中图片和公式输入还存在问题。 由于在引擎渲染生成网页的时候，语法和markdown语法冲突，可以通过在主题（Theme）中开启 MathJax 开关来避免这个问题 进入到主题目录，找到 _config.yml 配置问题，把 math 默认的 false 修改为true，具体如下： 12345678910math: enable: true # Default(true) will load mathjax/katex script on demand # That is it only render those page who has &apos;mathjax: true&apos; in Front Matter. # If you set it to false, it will load mathjax/katex srcipt EVERY PAGE. per_page: true engine: mathjax #engine: katex 然后在文章开头加入mathjax: true 123456---title: index.htmldate: 2018-07-05 12:01:30tags:mathjax: true-- $$\begin{array}{c}{f=u n} \ {p(f | u, L)=\frac{2 L^{L}}{\Gamma(L) u^{2 L}} f^{2 L-1} e^{-\frac{L^{2}}{u^{2}}}}\end{array}$$ 公式测试输入成功 直接保存本地图片无法在网页上显示，解决方法有两种： 使用图床 选择随意一个图床工具，我这里用的cheveretocom，上传你的图片，然后选择markdown链接，将链接放到![](签名链接)中，就可以正常显示。 此外还有各种工具能更快的做这步，比如mac下的imic，windows下的mpic 对博客中用到的图片把保存在对应文件夹下 首先确认将_config.yml 中的 post_asset_folder修改为true 之后在hexo n [postname]的时候会自动生成一个同名文件夹 然后在hexo的目录下执行npm install https://github.com/CodeFalling/hexo-asset-image --save 这样的目录结构（目录名和文章名一致），只要使用 ![logo](XX/logo.jpg) 就可以插入图片。其中[]里面不写文字则没有图片标题。 但是图片测试为什么没有成功呢。。]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>test</tag>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[hexo搭建博客]]></title>
+    <url>%2Fp%2Fdad8.html</url>
+    <content type="text"><![CDATA[前言通过hexo搭建个人博客主要有下面三个部分内容 安装hexo，生成基础文件格式 选择使用博客主题，修改配置文件 将文件上传到github上，然后通过域名解析连接到个人域名上 安装配置文件1.安装Node.js123sudo add-apt-repository ppa:chris-lea/node.jssudo apt-get updatesudo apt-get install nodejs 2.安装Git1sudo apt-get install git 3.安装hexo1sudo npm install hexo -g 初始你博客的根目录（或者cd到指定目录下，然后执行hexo init） 123$ hexo init &lt;folder&gt;$ cd &lt;folder&gt;$ npm install 此时就会生成如下路径的文件夹，到这一步hexo的安装任务就完成了 12345678.├── _config.yml├── package.json├── scaffolds├── source| ├── _drafts| └── _posts└── themes 这里解释一下各个文件夹的作用：config.yml博客的配置文件，博客的名称、关键词、作者、语言、博客主题…设置都在里面。package.json应用程序信息，新添加的插件内容也会出现在这里面，我们可以不修改这里的内容。scaffoldsscaffolds就是脚手架的意思，这里放了三个模板文件，分别是新添加博客文章（posts）、新添加博客页（page）和新添加草稿（draft）的目标样式。这部分可以修改的内容是，我们可以在模板上添加比如categories等自定义内容sourcesource是放置我们博客内容的地方，里面初始只有两个文件夹，一个是drafts（草稿），一个posts（文章），但之后我们通过命令新建tags（标签）还有categories（分类）页后，这里会相应地增加文件夹。themes放置主题文件包的地方。Hexo会根据这个文件来生成静态页面。初始状态下只有landscape一个文件夹，后续我们可以添加自己喜欢的。 修改配置文件 在 Hexo 中有两份主要的配置文件，其名称都是 _config.yml。 其中，一份位于站点根目录下，主要包含 Hexo 本身的配置；另一份位于主题目录下，这份配置由主题作者提供，主要用于配置主题相关的选项 。为了描述方便，在以下说明中，将前者称为站点配置文件， 后者称为主题配置文件。以下所有终端执行的命令都在你的Hexo根目录下 每一个冒号后的修改都需要添加空格 对于配置文件的修改可以通过12hexo s #默认端口为4000 # hexo s -p xxxx # 指定端口 来调试，访问’http://localhost:4000/&#39; 就能看到修改后的结果，有些修改需要重新开启调试以后才能看出变化 修改 站点配置文件12345678# Sitetitle: wuyu&apos;s Blog subtitle: try. description:keywords:author: wulanguage: zh-Hans # 选择语言，简体中文为zh-Hanstimezone: 对于默认生成的站点文件并不需要大量修改，而且可以通过安装第三方库的方式增加网站功能。 自己添加的功能添加头像12# 添加头像avatar: /avatar/header.jpeg # avatar文件夹需要保存在source文件夹下 12345# 自动生成sitemapsitemap: path: sitemap.xmlbaidusitemap: path: baidusitemap.xml 添加站点地图站点地图是一种文件，您可以通过该文件列出您网站上的网页，从而将您网站内容的组织架构告知Google和其他搜索引擎。Googlebot等搜索引擎网页抓取工具会读取此文件，以便更加智能地抓取您的网站 安装插件 打开hexo目录下的dos命令行，分别安装百度和google插件 12npm install hexo-generator-sitemap --savenpm install hexo-generator-baidu-sitemap --save 添加本地站内搜索需要安装依赖库12npm install --save hexo-generator-searchnpm install hexo-generator-searchdb --save 然后在站点配置文件添加123search: path: search.xml field: post 最后打开 主题配置文件 找到Local search，将enable设置为true 用于生成RSS12# Plugins: http://hexo.io/plugins/plugins: hexo-generate-feed 用于生成文章和站点的统计字数安装依赖库1npm install --save hexo-symbols-count-time 然后在站点配置文件添加12345symbols_count_time: symbols: true time: true total_symbols: true total_time: true 修改 主题配置文件更换主题按照喜好选择自己想用的主题，这里我选择NexT主题 1git clone https://github.com/theme-next/hexo-theme-next github上存在两个版本的next，上面时新版的next将下载下来的主题重命名为next， 放入你hexo的根目录下的themes文件夹下将站点配置文件中的theme修改为next 1234# Extensions## Plugins: https://hexo.io/plugins/## Themes: https://hexo.io/themes/theme: next 更换主题风格在next下有四种风格，通过取消注释来选择你想使用的风格，这里我才用了Gemini风格，但四种风格差异不大 12345# Schemes#scheme: Muse#scheme: Mist#scheme: Piscesscheme: Gemini 选择menu在menu下可以选择你可点选页面，tagsh和categories对于博客整理归类比较有用123456789menu: home: / || home about: /about/ || user tags: /tags/ || tags categories: /categories/ || th archives: /archives/ || archive #schedule: /schedule/ || calendar #sitemap: /sitemap.xml || sitemap #commonweal: /404/ || heartbeat 此时categories页面还没有生成，点击时会返回 cant get tags错误。我们需要通过以下命令增加page 1hexo new page categories 该命令将在source下生成categories文件夹，包含了index.md文件,之后的博客如果填写categories就会自动分类。 控制首页展示文章长度在博文中加入 1&lt; !--more--&gt; 来控制首页显示字符长度 也可以通过修改主题配置文件中的auto_excerpt来进行修改 12345# Automatically Excerpt. Not recommand.# Please use &lt;!-- more --&gt; in the post to control excerpt accurately.auto_excerpt: enable: false length: 150 方法1较为灵活，方法2能控制每个文章长度统一但是会把完整的句子打断显示为省略号，各有利弊 将文件配置到github以及个人域名搭建github库第一步： 需要有github账号 新建一个仓库项目名一定要是用户名.github.io的形式第二步：安装hexo-deployer-git（不然会出现ERROR Deployer not found: git） 1npm install hexo-deployer-git --save 第三步： 配置你hexo博客根目录下的_config.yml文件，需要修改的地方有两个 123456# URL## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'url: https://githubname.github.ioroot: /permalink: :year/:month/:day/:title/permalink_defaults: 123456# Deployment## Docs: http://hexo.io/docs/deployment.htmldeploy: type: git repo: git@github.com:githubname/githubname.github.io.git branch: master git配置在使用hexo d之前如果没有配置过git,需要在终端中输入 1ssh-keygen -t rsa -C &apos;githubname&apos; 然后连续回车，如果出现 1234Generating public/private rsa key pair.Enter file in which to save the key (/home/deepliver/.ssh/id_rsa): Enter passphrase (empty for no passphrase): Enter same passphrase again: 说明没有问题，继续回车会出现12Your identification has been saved in /User/username/.ssh/id_rsa.Your public key has been saved in /User/username/.ssh/id_rsa.pub. 此时输入 1cat /home/deepliver/.ssh/id_rsa.pub 会出现 ssh-rsa …将这些字符全部复制到github的setting中的SSH即完成配置 上传至github库然后在博客文件夹的根目录下输入 123$ git config --global user.name &apos;githubname&apos;$ git config --global user.email &apos;email@example.com&apos;$ hexo d 就能将文件夹上传到先前创建的XX.github.io项目中,此时访问这个网站就能看到你的博客内容 个人域名 购买域名（任意网站，如阿里云） 获得IP 输入ping 用户名.github.io 解析域名添加两条记录，选择记录类型A，第一个主机类型填@， 记录值为上一部得到的IP值第二个主机类型为www，其余不变 在github上新建CNAME文件内容为你所购买的域名 到此搭建过程基本完成，可以通过各种第三方库来完善你的博客。 最后一步之后就可以直接在本地的博客文件夹下通过 12345hexo n &quot;新的文章名&quot; # 就会在source/_posts下新建一个md文件# 写完博客之后hexo cleanhexo g # 生成新的静态页面hexo d # 将内容同步到github上 来新建博客～选择tags和categories的方式为在默认的—-区域中添加 123456tags: - tag1 - tag2# 或者tags: [tag1, tag2]categories: xxx 由于每次上传值github的过程时生成新的静态页面的过程，所以github上的CNAME文件可能被替代，以下是几种解决方法： 方法一：每次 hexo d 之后，就去 GitHub 仓库根目录新建 CNAME文件 方法二：在 hexo g 之后， hexo d 之前，把CNAME文件复制到 “\public\” 目录下面，里面写入你要绑定的域名。 方法三（推荐）：将需要上传至github的内容放在source文件夹，例如CNAME、favicon.ico、images等，这样在 hexo d 之后就不会被删除了。 方法四：通过安装插件实现永久保留 1$ npm install hexo-generator-cname --save 之后在_config.yml中添加一条 12Plugins:- hexo-generator-cname 需要注意的是：如果是在github上建立的CNAME文件，需要先clone到本地，然后安装插件，在deploy上去即可。CNAME只允许一个域名地址。此时_config.yml中url也需要修改成你所购买的域名.]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+        <tag>hexo</tag>
+        <tag>wuyu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2Fp%2F3eeb.html</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+  </entry>
+</search>
