@@ -1760,7 +1760,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #66ffd0;
+  background: #cf25ee;
 }
 .feed-link,
 .chat {
@@ -2966,7 +2966,7 @@ ul.breadcrumb li+li:last-child {
   }
 }
 body {
-  background: url("http://prsry3dpc.bkt.clouddn.com/day.jpeg");
+  background: url("https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ/day.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
