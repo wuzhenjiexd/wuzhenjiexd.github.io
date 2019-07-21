@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="图片外链替换之前的图片外链都通过七牛云制作，但是发现七牛云现在只有30天的测试外链，导致之前传的图片30天后就看不到了，所以需要一个替换外链以及上传本地图片的工具。 在挑选过很多厂商的云存储后选择了阿里云的OSS">
+<meta name="keywords" content="blog,python,oss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python图片外链替换">
+<meta property="og:url" content="https://www.wuyu.site/p/5735.html">
+<meta property="og:site_name" content="wuyu&#39;s Blog">
+<meta property="og:description" content="图片外链替换之前的图片外链都通过七牛云制作，但是发现七牛云现在只有30天的测试外链，导致之前传的图片30天后就看不到了，所以需要一个替换外链以及上传本地图片的工具。 在挑选过很多厂商的云存储后选择了阿里云的OSS">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563681537809.png">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563732217060.png">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563732240243.png">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563733592949.png">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/38bb90940a7b020860e41d9b6cd9f2d3562cc8dd.jpg">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/5a8e0a45ebf81a4c567c8cb3d92a6059242da6b8.jpg">
+<meta property="og:updated_time" content="2019-07-21T19:05:01.836Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python图片外链替换">
+<meta name="twitter:description" content="图片外链替换之前的图片外链都通过七牛云制作，但是发现七牛云现在只有30天的测试外链，导致之前传的图片30天后就看不到了，所以需要一个替换外链以及上传本地图片的工具。 在挑选过很多厂商的云存储后选择了阿里云的OSS">
+<meta name="twitter:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563681537809.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://www.wuyu.site/p/5735">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python图片外链替换 | wuyu's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wuyu's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">try.</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.wuyu.site/p/5735.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar/header.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wuyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">python图片外链替换
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-22 03:00:19 / 修改时间：03:05:01" itemprop="dateCreated datePublished" datetime="2019-07-22T03:00:19+08:00">2019-07-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/p/5735.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/p/5735.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="图片外链替换"><a href="#图片外链替换" class="headerlink" title="图片外链替换"></a>图片外链替换</h1><p>之前的图片外链都通过七牛云制作，但是发现七牛云现在只有30天的测试外链，导致之前传的图片30天后就看不到了，所以需要一个替换外链以及上传本地图片的工具。</p>
+<p>在挑选过很多厂商的云存储后选择了阿里云的OSS</p>
+<a id="more"></a>
+<h2 id="开通阿里云OSS"><a href="#开通阿里云OSS" class="headerlink" title="开通阿里云OSS"></a>开通阿里云OSS</h2><p>在使用阿里云OSS之前，需要<a href="https://www.aliyun.com/product/oss/" target="_blank" rel="noopener">注册</a>并且实名认证。在<a href="https://www.aliyun.com/product/oss" target="_blank" rel="noopener">OSS 产品详情页</a>，单击<strong>立即开通</strong>。</p>
+<p>开通之后在<strong>OSS 产品详情</strong>页面单击<strong>管理控制台</strong>就能直接进入 OSS 管理控制台界面。</p>
+<p>开通 OSS 服务后，默认的计费方式是<a href="https://help.aliyun.com/document_detail/48266.html#concept-emk-1nh-tdb" target="_blank" rel="noopener">按量付费</a>。也可以<a href="https://common-buy.aliyun.com/?spm=a2c4g.11186623.2.15.4c166e10W53083#buy" target="_blank" rel="noopener">购买折扣套餐</a>，我是用于在博客上上传图片因此选择标准存储类型，40GB容量每年也只需要9元。</p>
+<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563681537809.png" alt="存储空间"></p>
+<p>一般来说40G绰绰有余，可以先试试按量付费再选择。</p>
+<p>阿里云OSS可以在网页上直接上传图片获得外链，也可以通过下载OSSBrowser 客户端工具进行上传，由于想自动的完成上传任务，我选择通过用python调用API的方式来实现。</p>
+<h2 id="阿里云API"><a href="#阿里云API" class="headerlink" title="阿里云API"></a>阿里云API</h2><p>首先在控制平台中根据需要创建bucket，然后在用户头像里进入用户AccessKey，获得AccessKey ID和Access Key Secret，调用API前需要先安装oss库<code>pip install oss2</code>，按照以下代码实现上传</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> oss2</span><br><span class="line">keyid = <span class="string">'XX'</span></span><br><span class="line">keysecret = <span class="string">'YY'</span></span><br><span class="line">auth = oss2.Auth(keyid, keysecret)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Endpoint以北京为例，其它Region请按实际情况填写。</span></span><br><span class="line">Endpoint = <span class="string">'http://oss-cn-beijing.aliyuncs.com'</span></span><br><span class="line">Bucket_name = <span class="string">'NAME'</span> <span class="comment"># 你命名的Bucket_name</span></span><br><span class="line"></span><br><span class="line">http = <span class="string">'https://'</span> +Bucket_name + <span class="string">'.oss-cn-beijing.aliyuncs.com/'</span></span><br><span class="line">bucket = oss2.Bucket(auth, Endpoint, Bucket_name)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">up_oss</span><span class="params">(name, objectname, extension, path, bucket)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">	:param extension: 文件拓展名</span></span><br><span class="line"><span class="string">    :param name: 文件保存名</span></span><br><span class="line"><span class="string">    :param path: 本地图片路径</span></span><br><span class="line"><span class="string">    :param bucket: 保存的bucket名</span></span><br><span class="line"><span class="string">    :return: 新的图片外链</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    object_path = <span class="string">'WZJ_blog/'</span> + objectname + <span class="string">'/'</span> + name + <span class="string">'.'</span> + extension</span><br><span class="line">    bucket.put_object_from_file(object_path, path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> http + object_path</span><br></pre></td></tr></table></figure>
+<p>然后将新的外链替换md文件中旧的本地地址就可以了。</p>
+<h2 id="图片上传代码"><a href="#图片上传代码" class="headerlink" title="图片上传代码"></a>图片上传代码</h2><h3 id="总体思路"><a href="#总体思路" class="headerlink" title="总体思路"></a>总体思路</h3><ol>
+<li>读取md文件<code>with open(filepath, &#39;r&#39;, encoding=&#39;utf-8&#39;, errors=&#39;ignore&#39;) as f:            contents = f.read()</code></li>
+<li>用正则表达式匹配md文本中图片链接的部分<code>regex = r&#39;!\[.*?\]\((.+?)\)&#39;</code> </li>
+<li>判断是否为本地图片，若是则上传获得新图片外链，不是则跳过</li>
+<li>在md文本中的旧外链替换为新外链</li>
+</ol>
+<h3 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h3><p>运行时带路径命令行参数的情况，完成后自动退出，可以将多个md放在文件夹内将文件夹作为路径参数</p>
+<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563732217060.png" alt="1563732217060"></p>
+<p>运行时不带命令行参数的情况，完成后可继续下一个文件，也可对文件夹内的所有md继续替换。</p>
+<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563732240243.png" alt="1563732240243"></p>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><p>完整代码如下，使用时需要将<strong>keyid</strong>，<strong>keysecret</strong>，<strong>Bucket_name</strong>，<strong>Endpoint</strong>四个内容根据实际情况修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"><span class="keyword">from</span> tkinter.filedialog <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> oss2</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">islocal</span><span class="params">(path)</span>:</span></span><br><span class="line">    result = os.path.exists(path)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ismd</span><span class="params">(path)</span>:</span></span><br><span class="line">    res = os.path.splitext(path)[<span class="number">-1</span>] == <span class="string">'.md'</span></span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">readContentInFile</span><span class="params">(filepath)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param filepath:  读取md文件</span></span><br><span class="line"><span class="string">    :return: 返回md文件的字符串</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">with</span> open(filepath, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>, errors=<span class="string">'ignore'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        contents = f.read()</span><br><span class="line">    <span class="keyword">return</span> contents</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getURLsInFile</span><span class="params">(filePath)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param filePath: 搜索md文件中的图片链接，似乎[]中不写任何东西会漏选 ,将.+换成.*</span></span><br><span class="line"><span class="string">    :return: 所有连接的列表</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    content = readContentInFile(filePath)</span><br><span class="line">    regex = <span class="string">r'!\[.*?\]\((.+?)\)'</span></span><br><span class="line">    results = re.findall(regex, content)</span><br><span class="line">    <span class="keyword">return</span> results</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">up_oss</span><span class="params">(name, objectname, extension, path, bucket)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param name: 文件保存名</span></span><br><span class="line"><span class="string">    :param path: 本地图片路径</span></span><br><span class="line"><span class="string">    :param bucket: 保存的bucket名</span></span><br><span class="line"><span class="string">    :return: 新的图片外链</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    object_path = <span class="string">'WZJ_blog/'</span> + objectname + <span class="string">'/'</span> + name + <span class="string">'.'</span> + extension</span><br><span class="line">    bucket.put_object_from_file(object_path, path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> http + object_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">replaceAllsubStrInFile</span><span class="params">(filePath, oldStr, newStr)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param filePath:  md文本路径</span></span><br><span class="line"><span class="string">    :param oldStr:  旧的图片外链</span></span><br><span class="line"><span class="string">    :param newStr:  新的图片外链</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    aFile = open(filePath, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>, errors=<span class="string">'ignore'</span>)  <span class="comment"># 打开所有文件</span></span><br><span class="line">    str = aFile.read()</span><br><span class="line">    aFile.close()</span><br><span class="line">    str = str.replace(oldStr, newStr)  <span class="comment"># 将字符串里前面全部替换为后面</span></span><br><span class="line">    bFile = open(filePath, <span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>, errors=<span class="string">'ignore'</span>)</span><br><span class="line">    bFile.write(str)  <span class="comment"># 再写入</span></span><br><span class="line">    bFile.close()  <span class="comment"># 关闭文件</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repalce_url</span><span class="params">(file)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param file:  单个md文件</span></span><br><span class="line"><span class="string">    :return:  整合功能</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    object_name = os.path.split(file)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">    url_list = getURLsInFile(file)</span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> tqdm(url_list):</span><br><span class="line">        <span class="keyword">if</span> islocal(url):</span><br><span class="line">            save_path = url</span><br><span class="line">            name = os.path.split(url)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">            extension = os.path.split(url)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">-1</span>]</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                url_new = up_oss(name, object_name, extension, save_path, bucket)</span><br><span class="line">                replaceAllsubStrInFile(file, url, url_new)</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                print(<span class="string">'上传%s时发生错误'</span> %url)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'%s | 该本地路径查询失败，已跳过'</span> %url)</span><br><span class="line">    print(<span class="string">'所有图片链接已替换完毕'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">command_run</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    file_path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> os.path.isfile(file_path):</span><br><span class="line">        repalce_url(file_path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> os.path.isdir(file_path):</span><br><span class="line">        files = [os.path.join(file_path, e) <span class="keyword">for</span> e <span class="keyword">in</span> os.listdir(file_path)]</span><br><span class="line">        <span class="keyword">for</span> i, f_path <span class="keyword">in</span> enumerate(files):</span><br><span class="line">            <span class="keyword">if</span> ismd(f_path):</span><br><span class="line">                repalce_url(f_path)</span><br><span class="line">                print(<span class="string">'完成第%s个markdown文件'</span> % (i + <span class="number">1</span>))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">'%s已跳过'</span> % f_path)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GUI_run</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">return_path</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return:  将文件选择框的选择输入到path中</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        choose_path = askopenfilename(title=<span class="string">'Select markdown file'</span>,</span><br><span class="line">                                      filetypes=[(<span class="string">'markdown'</span>, <span class="string">'*.md'</span>), (<span class="string">'All Files'</span>, <span class="string">'*'</span>)])</span><br><span class="line">        path.set(choose_path)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reutrn_dir</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 将文件夹选择框的选择输入到path中</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        dir_path = askdirectory(title=<span class="string">'Select dir path'</span>)</span><br><span class="line">        path.set(dir_path)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start_replace</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 区分输入单个文件还是文件夹</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        file_path = path.get()</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(file_path):</span><br><span class="line">            repalce_url(file_path)</span><br><span class="line">        <span class="keyword">elif</span> os.path.isdir(file_path):</span><br><span class="line">            files = [os.path.join(file_path, e) <span class="keyword">for</span> e <span class="keyword">in</span> os.listdir(file_path)]</span><br><span class="line">            <span class="keyword">for</span> i, f_path <span class="keyword">in</span> enumerate(files):</span><br><span class="line">                <span class="keyword">if</span> ismd(f_path):</span><br><span class="line">                    repalce_url(f_path)</span><br><span class="line">                    print(<span class="string">'完成第%s个markdown文件'</span> % (i + <span class="number">1</span>))</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    print(<span class="string">'%s已跳过'</span> % f_path)</span><br><span class="line"></span><br><span class="line">    root = Tk()</span><br><span class="line">    root.title(<span class="string">"外链替换"</span>)</span><br><span class="line">    root.geometry(<span class="string">"300x150"</span>)</span><br><span class="line"></span><br><span class="line">    frame1 = Frame(root)  <span class="comment"># 将第一部分整合为一个框架</span></span><br><span class="line"></span><br><span class="line">    path = StringVar()</span><br><span class="line">    ttk.Label(</span><br><span class="line">        frame1, text=<span class="string">"输入路径"</span>, font=(<span class="string">'times'</span>, <span class="number">12</span>)).pack(</span><br><span class="line">        side=LEFT, padx=<span class="number">5</span>, pady=<span class="number">5</span>)</span><br><span class="line">    Button(frame1,</span><br><span class="line">           text=<span class="string">'选择路径'</span>, command=return_path,</span><br><span class="line">           padx=<span class="number">5</span>, pady=<span class="number">5</span>, font=(<span class="string">"times"</span>, <span class="number">10</span>)</span><br><span class="line">           ).pack(side=LEFT)</span><br><span class="line"></span><br><span class="line">    Button(frame1,</span><br><span class="line">           text=<span class="string">'选择文件夹路径'</span>, command=reutrn_dir,</span><br><span class="line">           padx=<span class="number">5</span>, pady=<span class="number">5</span>, font=(<span class="string">"times"</span>, <span class="number">10</span>)</span><br><span class="line">           ).pack(side=LEFT)</span><br><span class="line"></span><br><span class="line">    frame1.pack(side=TOP, padx=<span class="number">10</span>, pady=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    ttk.Entry(</span><br><span class="line">        root, textvariable=path).pack(</span><br><span class="line">        side=TOP, fill=X, padx=<span class="number">5</span>, pady=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    Button(root,</span><br><span class="line">           text=<span class="string">'开始替换图片外链'</span>,</span><br><span class="line">           command=start_replace,</span><br><span class="line">           padx=<span class="number">10</span>, pady=<span class="number">10</span>,</span><br><span class="line">           font=(<span class="string">"times"</span>, <span class="number">10</span>)</span><br><span class="line">           ).pack(side=LEFT)</span><br><span class="line"></span><br><span class="line">    Button(root,</span><br><span class="line">           text=<span class="string">'Quit'</span>,</span><br><span class="line">           command=root.quit,</span><br><span class="line">           padx=<span class="number">10</span>, pady=<span class="number">10</span>,</span><br><span class="line">           font=(<span class="string">"times"</span>, <span class="number">10</span>)</span><br><span class="line">           ).pack(side=RIGHT)</span><br><span class="line"></span><br><span class="line">    root.mainloop()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。</span></span><br><span class="line">    keyid = <span class="string">'XX'</span></span><br><span class="line">	keysecret = <span class="string">'YY'</span></span><br><span class="line">	auth = oss2.Auth(keyid, keysecret)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Endpoint以杭州为例，其它Region请按实际情况填写。</span></span><br><span class="line">    Endpoint = <span class="string">'http://oss-cn-beijing.aliyuncs.com'</span></span><br><span class="line">    Bucket_name = <span class="string">'NAME'</span> <span class="comment"># 你命名的Bucket_name</span></span><br><span class="line"></span><br><span class="line">    http = <span class="string">'https://'</span> +Bucket_name + <span class="string">'.oss-cn-beijing.aliyuncs.com/'</span></span><br><span class="line">    bucket = oss2.Bucket(auth, Endpoint, Bucket_name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) == <span class="number">1</span>:  <span class="comment"># 无命令行参数</span></span><br><span class="line">        GUI_run()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> len(sys.argv) == <span class="number">2</span>: <span class="comment"># 带地址参数</span></span><br><span class="line">        <span class="keyword">if</span> os.path.exists(sys.argv[<span class="number">1</span>]) <span class="keyword">and</span> os.path.splitext(sys.argv[<span class="number">1</span>])[<span class="number">-1</span>] == <span class="string">'.md'</span>:  <span class="comment"># 路径输入正确</span></span><br><span class="line">            command_run()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> os.path.isdir(sys.argv[<span class="number">1</span>]):</span><br><span class="line">            command_run()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'路径不存在或为非md文件，请退出重输'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'参数过多，请检查输入'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="其它图库外链转移代码"><a href="#其它图库外链转移代码" class="headerlink" title="其它图库外链转移代码"></a>其它图库外链转移代码</h2><p>为了以防万一，还写了一个将图片从一个云存储转移到了一个云存储的代码，原理是将图片从一个前云存储上下载下来存在本地，然后进行上传替换，其他部分和图片上传代码差不多。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlretrieve</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_img</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    name: 图片的保存名</span></span><br><span class="line"><span class="string">    extension： 图片的保存格式</span></span><br><span class="line"><span class="string">    :param url:  单个图片外链</span></span><br><span class="line"><span class="string">    :return:  下载图片至本地以及返回文件名加路径</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    name = os.path.split(url)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">    extension = os.path.split(url)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">-1</span>]</span><br><span class="line">    <span class="comment"># print(name)</span></span><br><span class="line">    urlretrieve(url,  os.path.join(save.get(), name)+ <span class="string">'.'</span> + extension)</span><br><span class="line">    <span class="keyword">return</span> name, extension, os.path.join(save.get(), name) + <span class="string">'.'</span> + extension</span><br></pre></td></tr></table></figure>
+<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/1563733592949.png" alt="1563733592949"></p>
+<h2 id="效果测试"><a href="#效果测试" class="headerlink" title="效果测试"></a>效果测试</h2><p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/38bb90940a7b020860e41d9b6cd9f2d3562cc8dd.jpg" alt="38bb90940a7b020860e41d9b6cd9f2d3562cc8dd">  </p>
+<p>  <img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/url/5a8e0a45ebf81a4c567c8cb3d92a6059242da6b8.jpg" alt="5a8e0a45ebf81a4c567c8cb3d92a6059242da6b8"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/blog/" rel="tag"># blog</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/oss/" rel="tag"># oss</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/p/59e6.html" rel="next" title="steam游戏按照MC均分自动分类">
+                <i class="fa fa-chevron-left"></i> steam游戏按照MC均分自动分类
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/avatar/header.jpeg" alt="wu">
+            
+              <p class="site-author-name" itemprop="name">wu</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wuzhenjiexd" title="GitHub &rarr; https://github.com/wuzhenjiexd" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:zhenjiewu12@gmail.com" title="E-Mail &rarr; mailto:zhenjiewu12@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#图片外链替换"><span class="nav-number">1.</span> <span class="nav-text">图片外链替换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开通阿里云OSS"><span class="nav-number">1.1.</span> <span class="nav-text">开通阿里云OSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阿里云API"><span class="nav-number">1.2.</span> <span class="nav-text">阿里云API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片上传代码"><span class="nav-number">1.3.</span> <span class="nav-text">图片上传代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总体思路"><span class="nav-number">1.3.1.</span> <span class="nav-text">总体思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现效果"><span class="nav-number">1.3.2.</span> <span class="nav-text">实现效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完整代码"><span class="nav-number">1.3.3.</span> <span class="nav-text">完整代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它图库外链转移代码"><span class="nav-number">1.4.</span> <span class="nav-text">其它图库外链转移代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果测试"><span class="nav-number">1.5.</span> <span class="nav-text">效果测试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wu</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">25k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">23 分钟</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.1</div>
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '6VUxWsNETHyd2jeCkTYowTxV-gzGzoHsz',
+    appKey: '45k0veYH0vcnYfyOkfmoo9R0',
+    placeholder: '啊、啊、听得到么？',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '63ea8e3ae07736e6dbd2',
+    clientSecret: '9c4cb1c72d8382f6feacbee28db82d8773a050f9',
+    repo: 'Neveryu.github.io',
+    owner: 'wuzhenjiexd',
+    admin: ['wuzhenjiexd'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
