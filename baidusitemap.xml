@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://www.wuyu.site/p/a8ba.html</loc>
+    <mobile:mobile type="pc,mobile"/>
+    <lastmod>2019-08-19</lastmod>
+  </url>  <url>
+    <loc>http://www.wuyu.site/p/1a1c.html</loc>
+    <mobile:mobile type="pc,mobile"/>
+    <lastmod>2019-08-19</lastmod>
+  </url>  <url>
     <loc>http://www.wuyu.site/p/5735.html</loc>
+    <mobile:mobile type="pc,mobile"/>
     <lastmod>2019-07-21</lastmod>
   </url>  <url>
     <loc>http://www.wuyu.site/p/59e6.html</loc>
+    <mobile:mobile type="pc,mobile"/>
     <lastmod>2019-07-01</lastmod>
   </url>  <url>
     <loc>http://www.wuyu.site/p/787a.html</loc>
+    <mobile:mobile type="pc,mobile"/>
     <lastmod>2019-07-01</lastmod>
   </url>  <url>
     <loc>http://www.wuyu.site/p/5ee0.html</loc>
-    <lastmod>2019-05-24</lastmod>
-  </url>  <url>
-    <loc>http://www.wuyu.site/p/dad8.html</loc>
-    <lastmod>2019-05-24</lastmod>
-  </url>  <url>
-    <loc>http://www.wuyu.site/p/7c7e.html</loc>
-    <lastmod>2019-05-24</lastmod>
-  </url>  <url>
-    <loc>http://www.wuyu.site/p/ea1c.html</loc>
+    <mobile:mobile type="pc,mobile"/>
     <lastmod>2019-05-24</lastmod>
   </url>  <url>
     <loc>http://www.wuyu.site/p/91ec.html</loc>
+    <mobile:mobile type="pc,mobile"/>
+    <lastmod>2019-05-24</lastmod>
+  </url>  <url>
+    <loc>http://www.wuyu.site/p/ea1c.html</loc>
+    <mobile:mobile type="pc,mobile"/>
+    <lastmod>2019-05-24</lastmod>
+  </url>  <url>
+    <loc>http://www.wuyu.site/p/7c7e.html</loc>
+    <mobile:mobile type="pc,mobile"/>
+    <lastmod>2019-05-24</lastmod>
+  </url>  <url>
+    <loc>http://www.wuyu.site/p/dad8.html</loc>
+    <mobile:mobile type="pc,mobile"/>
     <lastmod>2019-05-24</lastmod>
   </url>
 </urlset>

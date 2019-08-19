@@ -104,20 +104,22 @@
 
 
 
-  <meta name="description" content="pathlib作为python3的新特性之一，对于路径会创造Path对象，使对路径的操作更方便。之前在别人的代码里见识到了pathlib的优点，现在希望用pathlib来代替os库来完成路径的操作。">
-<meta name="keywords" content="python,os,pathlib">
+  <meta name="description" content="C++实现深度学习模型FPGA部署（1）——卷积信号处理中的卷积在信号处理中，经常会对信号进行卷积操作，卷积这个概念最早来源于信号处理中。 假设对于一个线性系统其在单位脉冲δ(t)的响应下，输出为h(t).那么在Aδ(t)的响应下输出为Ah(t).而所有的信号都可以用δ(t)乘以一个系数的和来表示。">
+<meta name="keywords" content="C++,FPGA,深度学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python库:pathlib和os的区别">
-<meta property="og:url" content="http://www.wuyu.site/p/787a.html">
+<meta property="og:title" content="C++实现深度学习模型FPGA部署（1）——卷积">
+<meta property="og:url" content="http://www.wuyu.site/p/a8ba.html">
 <meta property="og:site_name" content="wuyu&#39;s Blog">
-<meta property="og:description" content="pathlib作为python3的新特性之一，对于路径会创造Path对象，使对路径的操作更方便。之前在别人的代码里见识到了pathlib的优点，现在希望用pathlib来代替os库来完成路径的操作。">
+<meta property="og:description" content="C++实现深度学习模型FPGA部署（1）——卷积信号处理中的卷积在信号处理中，经常会对信号进行卷积操作，卷积这个概念最早来源于信号处理中。 假设对于一个线性系统其在单位脉冲δ(t)的响应下，输出为h(t).那么在Aδ(t)的响应下输出为Ah(t).而所有的信号都可以用δ(t)乘以一个系数的和来表示。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ/os.png">
-<meta property="og:updated_time" content="2019-07-01T09:31:14.930Z">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/fangbo.gif">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/RC.gif">
+<meta property="og:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/Convolution_schematic.gif">
+<meta property="og:updated_time" content="2019-08-19T17:43:38.995Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python库:pathlib和os的区别">
-<meta name="twitter:description" content="pathlib作为python3的新特性之一，对于路径会创造Path对象，使对路径的操作更方便。之前在别人的代码里见识到了pathlib的优点，现在希望用pathlib来代替os库来完成路径的操作。">
-<meta name="twitter:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ/os.png">
+<meta name="twitter:title" content="C++实现深度学习模型FPGA部署（1）——卷积">
+<meta name="twitter:description" content="C++实现深度学习模型FPGA部署（1）——卷积信号处理中的卷积在信号处理中，经常会对信号进行卷积操作，卷积这个概念最早来源于信号处理中。 假设对于一个线性系统其在单位脉冲δ(t)的响应下，输出为h(t).那么在Aδ(t)的响应下输出为Ah(t).而所有的信号都可以用δ(t)乘以一个系数的和来表示。">
+<meta name="twitter:image" content="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/fangbo.gif">
 
 
 
@@ -125,7 +127,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuyu.site/p/787a">
+  <link rel="canonical" href="http://www.wuyu.site/p/a8ba">
 
 
 
@@ -135,7 +137,7 @@
   };
 </script>
 
-  <title>python库:pathlib和os的区别 | wuyu's Blog</title>
+  <title>C++实现深度学习模型FPGA部署（1）——卷积 | wuyu's Blog</title>
   
 
 
@@ -508,7 +510,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuyu.site/p/787a.html">
+    <link itemprop="mainEntityOfPage" href="http://www.wuyu.site/p/a8ba.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wu">
@@ -525,7 +527,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">python库:pathlib和os的区别
+          <h2 class="post-title" itemprop="name headline">C++实现深度学习模型FPGA部署（1）——卷积
 
               
             
@@ -551,24 +553,12 @@
                 
               
 
-              <time title="创建时间：2019-05-20 13:58:20" itemprop="dateCreated datePublished" datetime="2019-05-20T13:58:20+08:00">2019-05-20</time>
+              <time title="创建时间：2019-08-20 01:21:33 / 修改时间：01:43:38" itemprop="dateCreated datePublished" datetime="2019-08-20T01:21:33+08:00">2019-08-20</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-01 17:31:14" itemprop="dateModified" datetime="2019-07-01T17:31:14+08:00">2019-07-01</time>
               
             
           </span>
@@ -585,7 +575,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/硬件/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a></span>
 
                 
                 
@@ -604,8 +594,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/p/787a.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/p/787a.html" itemprop="commentCount"></span>
+                <a href="/p/a8ba.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/p/a8ba.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -634,7 +624,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.4k</span>
+                <span title="本文字数">3.9k</span>
               
 
               
@@ -648,7 +638,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2 分钟</span>
+                <span title="阅读时长">4 分钟</span>
               
             </div>
           
@@ -668,64 +658,24 @@
       
 
       
-        <p>pathlib作为python3的新特性之一，对于路径会创造Path对象，使对路径的操作更方便。之前在别人的代码里见识到了pathlib的优点，现在希望用pathlib来代替os库来完成路径的操作。</p>
+        <h1 id="C-实现深度学习模型FPGA部署（1）——卷积"><a href="#C-实现深度学习模型FPGA部署（1）——卷积" class="headerlink" title="C++实现深度学习模型FPGA部署（1）——卷积"></a>C++实现深度学习模型FPGA部署（1）——卷积</h1><h2 id="信号处理中的卷积"><a href="#信号处理中的卷积" class="headerlink" title="信号处理中的卷积"></a>信号处理中的卷积</h2><p>在信号处理中，经常会对信号进行卷积操作，卷积这个概念最早来源于信号处理中。</p>
+<p>假设对于一个线性系统其在单位脉冲δ(t)的响应下，输出为h(t).那么在Aδ(t)的响应下输出为Ah(t).而所有的信号都可以用δ(t)乘以一个系数的和来表示。</p>
 <a id="more"></a>
-<p>目前我主要用到os的地方有以下几个：</p>
-<p><a href="#join">路径拼接</a></p>
-<p><a href="#mkdir">新建文件夹</a></p>
-<p><a href="#walk">文件遍历</a></p>
-<p><a href="#list">获得子级文件的路径</a></p>
-<p><a href="#rename">重命名文件夹</a></p>
-<p><a href="#other">pathlib的优势</a></p>
-<p><a href="#lack">pathlib的不足</a></p>
-<ul>
-<li><span id="join">路径拼接</span></li>
-</ul>
-<p>pathlib采用了斜线直接连接的方式，</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">path = <span class="string">'root'</span></span><br><span class="line">dir = <span class="string">'test'</span></span><br><span class="line">target_path = os.path.join(path,dir) <span class="comment"># 'root/test'</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'root'</span>)</span><br><span class="line">p2 = p1/<span class="string">'test'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><span id="mkdir">新建文件夹</span></li>
-</ul>
-<p>在使用os库的时候，新建文件夹之前需要判断文件夹是否存在，如果文件夹已存在，创建文件夹时会报错。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">    os.mkdir(path) <span class="comment"># 创建一个文件夹</span></span><br><span class="line">    os.makedirs(path) <span class="comment"># 创建多个文件夹</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p = <span class="string">'XXX'</span></span><br><span class="line">p.mkdir(parents=<span class="literal">True</span>) <span class="comment"># parents=True会创造路径中间缺少的文件夹</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><span id="walk">文件遍历</span></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(path):</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        temp_path = os.path.join(root, file)</span><br></pre></td></tr></table></figure>
-<p>pathlib在遍历时结合了glob,在检索时还能定制检索的要求。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">base_dir = <span class="string">'XXX'</span></span><br><span class="line">p = Path(base_dir)</span><br><span class="line"><span class="comment"># 遍历获取改文件夹下面所有的文件</span></span><br><span class="line">file_list = p.glob(<span class="string">'**/*'</span>) </span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> file_list:</span><br></pre></td></tr></table></figure>
-<ul>
-<li><span id="list">获得子级文件的路径</span></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.listdir()</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path </span><br><span class="line">Path.iterdir()</span><br></pre></td></tr></table></figure>
-<ul>
-<li><span id="rename">重命名文件夹</span></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.rename(src, dst)</span><br><span class="line"><span class="comment"># src -- 要修改的目录名</span></span><br><span class="line"><span class="comment"># dst -- 修改后的目录名</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path </span><br><span class="line">p = Path(src)</span><br><span class="line">p.rename(dst)</span><br><span class="line"><span class="comment"># 即pathlib主要是通过对象来完成功能</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><span id="other">pathlib的优势</span></li>
-</ul>
-<p>在建立path对象之后，可以调用路径的组件直接获得路径的信息：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Path. parts <span class="comment">#获得路径的各个组件</span></span><br><span class="line">PurePath(<span class="string">'/usr/bin/python3'</span>).parts</span><br><span class="line">(<span class="string">'/'</span>,<span class="string">'usr'</span>, <span class="string">'bin'</span>, <span class="string">'python3'</span>)</span><br><span class="line"><span class="comment">######################################</span></span><br><span class="line">PurePath. drive <span class="comment">#获得路径的驱动</span></span><br><span class="line">PureWindowsPath(<span class="string">'c:/Program Files/'</span>).drive</span><br><span class="line"><span class="string">'c:'</span></span><br><span class="line"><span class="comment">########################################</span></span><br><span class="line">PurePath. parents <span class="comment">#路径的父级</span></span><br><span class="line">p = PureWindowsPath(<span class="string">'c:/foo/bar/setup.py'</span>)</span><br><span class="line"></span><br><span class="line">p.parents[<span class="number">0</span>]</span><br><span class="line">PureWindowsPath(<span class="string">'c:/foo/bar'</span>)</span><br><span class="line"></span><br><span class="line">p.parents[<span class="number">1</span>]</span><br><span class="line">PureWindowsPath(<span class="string">'c:/foo'</span>)</span><br><span class="line"></span><br><span class="line">p.parents[<span class="number">2</span>]</span><br><span class="line">PureWindowsPath(<span class="string">'c:/'</span>)</span><br><span class="line"><span class="comment">#########################################</span></span><br><span class="line">PurePath. name <span class="comment">#路径的最终路径</span></span><br><span class="line">PurePosixPath(<span class="string">'my/library/setup.py'</span>).name</span><br><span class="line"><span class="string">'setup.py</span></span><br><span class="line"><span class="string">##########################################</span></span><br><span class="line"><span class="string">PurePath. suffix #路径的文件拓展名</span></span><br><span class="line"><span class="string">PurePosixPath('</span>my/library/setup.py<span class="string">').suffix</span></span><br><span class="line"><span class="string">'</span>.py<span class="string">'</span></span><br></pre></td></tr></table></figure>
-<p>pathlib一些方法在实现时调用了os的方法，所以很多输出他们是一样的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cwd</span><span class="params">(cls)</span>:</span></span><br><span class="line">    <span class="string">"""Return a new path pointing to the current working directory</span></span><br><span class="line"><span class="string">    (as returned by os.getcwd()).</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> cls(os.getcwd())</span><br></pre></td></tr></table></figure>
-<p>但是使用 Path 对象可以使代码更加明确。比如</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line">person = &#123;<span class="string">"name"</span>: <span class="string">"Trey Hunner"</span>, <span class="string">"location"</span>: <span class="string">"San Diego"</span>&#125;</span><br><span class="line">pycon_2019 = date(<span class="number">2019</span>, <span class="number">5</span>, <span class="number">1</span>)</span><br><span class="line">home_directory = Path(<span class="string">'/home/trey'</span>)</span><br></pre></td></tr></table></figure>
-<p>就会比下面的代码更直观。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">person = <span class="string">'&#123;"name": "Trey Hunner", "location": "San Diego"&#125;'</span></span><br><span class="line">pycon_2019 = <span class="string">"2019-05-01"</span></span><br><span class="line">home_directory = <span class="string">'/home/trey'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><span id="lack">pathlib的不足之处  </span> </li>
-</ul>
+<p>即<br>$$<br>u(t)=\int_{-\infty}^{+\infty} u(x) \delta(t-x) d x<br>$$<br><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/fangbo.gif" alt="方波"></p>
+<p>上图为两个方波之间的卷积，黑线为卷积之后的结果。</p>
+<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/RC.gif" alt="RC电路卷积"></p>
+<p>上图为方波与指数衰退脉冲波的卷积。</p>
+<p>由于此时卷积的对象只有一维，这种情况可以称为一维卷积。</p>
+<h2 id="深度学习中的卷积"><a href="#深度学习中的卷积" class="headerlink" title="深度学习中的卷积"></a>深度学习中的卷积</h2><p>将卷积的对象从一维推广到二维，就可以实现二维卷积，二维卷积通常用来对图像进行处理。此时我们将卷积所用的滤波器称为卷积核。一些常见的卷积核也被称为算子，比如Robert算子，Sobel算子。与信号处理中不同的是<strong>在信号处理上，反转180度称作卷积，直接滑动计算称作自相关，在大部分深度学习框架上都没有反转180度的操作。</strong></p>
+<p>对a，b两个二维矩阵的卷积公式可以写为<br>$$<br>c\left(n_{1}, n_{2}\right)=\sum_{k_{1}=-\infty}^{\infty} \sum_{k_{2}=-\infty}^{\infty} a\left(k_{1}, k_{2}\right) b\left(n_{1}-k_{1}, n_{2}-k_{2}\right)<br>$$<br>动态过程如下图所示</p>
+<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ_blog/C-1/Convolution_schematic.gif" alt="Convolution_schematic"></p>
+<h2 id="C-代码实现"><a href="#C-代码实现" class="headerlink" title="C++代码实现"></a>C++代码实现</h2><p>根据填充的边界设定不同，BoundaryCondition可选的类型有</p>
 <ol>
-<li><p>pathlib缺少对文件夹进行复制粘贴的功能，相应操作需要导入shutil才能完成</p>
-</li>
-<li><p>pathlib缺少os.chdir，无法改变当前的工作目录</p>
-</li>
+<li>zero边界以外的点为0</li>
+<li>bound边界以外的点和边界值相等</li>
+<li>period边界以外的点和另一边界上的点组成周期信号</li>
 </ol>
-<p>最后是一些os和pathlib的对照语法。</p>
-<p><img src="https://blog-w.oss-cn-beijing.aliyuncs.com/WZJ/os.png" alt="os&amp;path"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;  </span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> BoundaryCondition</span><br><span class="line">&#123;</span><br><span class="line">    zero</span><br><span class="line">    ,bound</span><br><span class="line">    ,period</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> Method</span><br><span class="line">&#123;</span><br><span class="line">    full</span><br><span class="line">    ,same</span><br><span class="line">    ,valid</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//参数设置</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> A_Row = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> A_Col = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> B_Row = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> B_Col = <span class="number">3</span>;</span><br><span class="line">BoundaryCondition Bc = zero;</span><br><span class="line">Method method = full;</span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> A[A_Row][A_Col] = &#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;,</span><br><span class="line">                         &#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;,</span><br><span class="line">                         &#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;,</span><br><span class="line">                         &#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">float</span> B[B_Row][B_Col] = &#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>&#125;,</span><br><span class="line">                         &#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">2</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">float</span>** C = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> cR;</span><br><span class="line"><span class="keyword">int</span> cC;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function">T <span class="title">GetA_Ele</span><span class="params">(<span class="keyword">int</span> row,<span class="keyword">int</span> col)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">conv</span><span class="params">(<span class="keyword">const</span> T a[][A_Col],<span class="keyword">const</span> T b[][B_Col],T**&amp; c)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    conv(A,B,C);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; cR;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j &lt; cC;j++)</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;C[i][j]&lt;&lt;<span class="string">"\t"</span>;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span>[] C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//计算A和B的卷积  </span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">conv</span><span class="params">(<span class="keyword">const</span> T a[][A_Col],<span class="keyword">const</span> T b[][B_Col],T**&amp; c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> offsetR = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> offsetC = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">switch</span>(method)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> full:</span><br><span class="line">            cR = A_Row + B_Row - <span class="number">1</span>;</span><br><span class="line">            cC = A_Col + B_Col - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> same:</span><br><span class="line">            cR = A_Row;</span><br><span class="line">            cC = A_Col;</span><br><span class="line">            offsetR = B_Row/<span class="number">2</span>;</span><br><span class="line">            offsetC = B_Col/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> valid:</span><br><span class="line">            cR = A_Row - B_Row + <span class="number">1</span>;</span><br><span class="line">            cC = A_Col - B_Col + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>((cR &lt; <span class="number">1</span>)|(cC &lt; <span class="number">1</span>))</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            offsetR = B_Row - <span class="number">1</span>;</span><br><span class="line">            offsetC = B_Col - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    c = <span class="keyword">new</span> T*[cR];             <span class="comment">//给二维数组分配空间</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; cR;i++)</span><br><span class="line">        c[i] = <span class="keyword">new</span> T[cC];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; cR;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j &lt; cC;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            c[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k1 = <span class="number">0</span>;k1 &lt; B_Row;k1++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k2 = <span class="number">0</span>;k2 &lt; B_Col;k2++)</span><br><span class="line">                    c[i][j] += b[k1][k2]*GetA_Ele&lt;<span class="keyword">float</span>&gt;(i - k1 + offsetR,j - k2 + offsetC);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据边界条件获取A矩阵的元素</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function">T <span class="title">GetA_Ele</span><span class="params">(<span class="keyword">int</span> row,<span class="keyword">int</span> col)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(Bc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> zero:      <span class="comment">//索引超出界限认为0</span></span><br><span class="line">            <span class="keyword">if</span>((row &lt; <span class="number">0</span>)|(row &gt; A_Row)|(col &lt; <span class="number">0</span>)|(col &gt; A_Col))</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">case</span> bound:     <span class="comment">//超出索引部分和边界值相等</span></span><br><span class="line">            <span class="keyword">if</span>(row &lt; <span class="number">0</span>)</span><br><span class="line">                row = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(row &gt;= A_Row)</span><br><span class="line">                row = A_Row - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(col &lt; <span class="number">0</span>)</span><br><span class="line">                col = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(col &gt;= A_Col)</span><br><span class="line">                col = A_Col - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> A[row][col];</span><br><span class="line">        <span class="keyword">case</span> period:</span><br><span class="line">            <span class="keyword">while</span>((row &lt; <span class="number">0</span>)|(row &gt;= A_Row))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(row &lt; <span class="number">0</span>)</span><br><span class="line">                    row += A_Row;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    row -= A_Row;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span>((col &lt; <span class="number">0</span>)|(col &gt;= A_Col))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(col &lt; <span class="number">0</span>)</span><br><span class="line">                    col += A_Col;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    col -= A_Col;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> A[row][col];</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> T(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -749,11 +699,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/C/" rel="tag"># C++</a>
           
-            <a href="/tags/os/" rel="tag"># os</a>
+            <a href="/tags/FPGA/" rel="tag"># FPGA</a>
           
-            <a href="/tags/pathlib/" rel="tag"># pathlib</a>
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
           
         </div>
       
@@ -766,19 +716,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/p/7c7e.html" rel="next" title="优化网站打开的速度">
-                <i class="fa fa-chevron-left"></i> 优化网站打开的速度
-              </a>
+              <a href="/p/1a1c.html" rel="next" title="博客更新<2>">
+                <i class="fa fa-chevron-left"></i> 博客更新<2>
+              </2></a>
             
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/p/5ee0.html" rel="prev" title="使用pyradiomics提取医学图像中的特征">
-                使用pyradiomics提取医学图像中的特征 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -826,8 +772,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -977,6 +932,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C-实现深度学习模型FPGA部署（1）——卷积"><span class="nav-number">1.</span> <span class="nav-text">C++实现深度学习模型FPGA部署（1）——卷积</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#信号处理中的卷积"><span class="nav-number">1.1.</span> <span class="nav-text">信号处理中的卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深度学习中的卷积"><span class="nav-number">1.2.</span> <span class="nav-text">深度学习中的卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-代码实现"><span class="nav-number">1.3.</span> <span class="nav-text">C++代码实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1573,6 +1545,46 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
